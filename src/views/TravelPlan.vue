@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from '@vue/reactivity';
 import { reactive } from 'vue';
 const totalPay = (target) => {
   const payList = target.transportation.option.map((i) => i.pay);
@@ -25,7 +26,7 @@ const plan = reactive([
         option: [
           {
             mode: 'Sky liner',
-            trainName: '付費特急京成上野',
+            trainName: '付費特急(往京成上野)',
             to: '日暮里',
             pay: 1300,
             time: 41
@@ -39,7 +40,7 @@ const plan = reactive([
           },
           {
             mode: 'JR',
-            trainName: '山手線各站停車池袋 / 新宿方面(內環線)',
+            trainName: '山手線(內環線)',
             to: '新大久保',
             pay: 180,
             time: 20
@@ -64,13 +65,13 @@ const plan = reactive([
           {
             mode: 'walking',
             trainName: null,
-            to: '日暮里',
+            to: '東新宿',
             pay: 0,
             time: 10
           },
           {
             mode: '地鐵',
-            trainName: '副都心線各站停車元町、中華街',
+            trainName: '副都心線(往元町、中華街)',
             to: '澀谷車站',
             pay: 180,
             time: 9
@@ -118,7 +119,7 @@ const plan = reactive([
           },
           {
             mode: '地鐵',
-            trainName: '副都心線 石神井公園',
+            trainName: '副都心線(往石神井公園)',
             to: '東新宿',
             pay: 180,
             time: 9
@@ -250,6 +251,62 @@ const plan = reactive([
       leaveTime: '',
       transportation: null
     }
+  ],
+  [
+    {
+      name: 'APA酒店',
+      arrivedTime: '00:00',
+      leaveTime: '08:00',
+      transportation: {
+        googleUrl: 'https://goo.gl/maps/g2zD1cDZUvoMPkGd6',
+        option: [
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '東新宿',
+            pay: 0,
+            time: 6
+          },
+          {
+            mode: '地鐵',
+            trainName: '都營大江戶(往飯田橋、兩國)',
+            to: '上野御徒町',
+            pay: 0,
+            time: 15
+          },
+          {
+            mode: '地鐵',
+            trainName: '東京地鐵銀座線(往淺草)',
+            to: '淺草',
+            pay: 317,
+            time: 7
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '風神雷門',
+            pay: 0,
+            time: 2
+          }
+        ]
+      },
+    },{
+      name: '風神雷門',
+      arrivedTime: '08:40',
+      leaveTime: '08:00',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '東新宿',
+            pay: 0,
+            time: 6
+          },
+        ]
+      },
+    }
   ]
 ]);
 const show = reactive({});
@@ -257,15 +314,46 @@ const showTran = (day, index) => {
   show[day] = show[day] ?? {};
   show[day][index] = !show[day][index];
 };
+
+const totalTransPay = (mode) => {
+  const a = [];
+  plan.forEach((i) =>
+    i.forEach((j) =>
+      j.transportation?.option.forEach((d) => {
+        if (d.mode == mode) {
+          a.push(d.pay);
+        }
+      })
+    )
+  );
+  const total = a.reduce((a, b) => a + b);
+  return total;
+};
+const transTools = computed(() => {
+  const list = [];
+  plan.forEach((i) =>
+    i.forEach((j) =>
+      j.transportation?.option.forEach((d) => {
+        if (!list.includes(d.mode)) list.push(d.mode);
+      })
+    )
+  );
+
+  return list;
+});
 </script>
 
 <template>
   <div>
+    <template v-for="item in transTools" :key="item">
+      <div>{{ item }} ： ¥{{ totalTransPay(item) }}</div>
+    </template>
+
     <div class="wrap mt-3">
       <div class="container">
         <div class="row">
           <template v-for="(targets, day) in plan" :key="targets">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-lg-6 my-3">
               <h4>Day{{ day + 1 }}:</h4>
               <template v-for="(target, index) in targets" :key="target.name">
                 <div class="tt1 mt-3 p-2">
@@ -317,7 +405,7 @@ const showTran = (day, index) => {
                           <div class="col col-4 col-lg-2">{{ item.mode }}</div>
                           <div class="col col-4 col-lg-2">{{ item.time }}min</div>
                           <div class="col col-4 col-lg-2">¥{{ item.pay }}</div>
-                          <div class="col col-12 col-lg-3" :style="!item.trainName?'border:none':''">
+                          <div class="col col-12 col-lg-3">
                             {{ item.trainName }}
                           </div>
                           <div class="col col-12 col-lg-3">{{ item.to }}</div>
