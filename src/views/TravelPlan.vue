@@ -188,7 +188,7 @@ const plan = reactive([
             to: '舞濱',
             pay: 170,
             time: 6
-          },
+          }
         ]
       }
     },
@@ -240,7 +240,7 @@ const plan = reactive([
             to: 'APA酒店',
             pay: 0,
             time: 8
-          },
+          }
         ]
       }
     },
@@ -306,19 +306,21 @@ const showTran = (day, index) => {
                     </div>
                     <div class="transportationContent" v-show="show?.[day]?.[index]">
                       <div class="row header" style="background-color: aliceblue">
-                        <div class="col">交通方式</div>
-                        <div class="col">車種</div>
-                        <div class="col">目的</div>
-                        <div class="col-2">時間</div>
-                        <div class="col-2">價格</div>
+                        <div class="col col-4 col-lg-2">交通方式</div>
+                        <div class="col col-4 col-lg-2">時間</div>
+                        <div class="col col-4 col-lg-2">價格</div>
+                        <div class="col col-12 col-lg-3">車種</div>
+                        <div class="col col-12 col-lg-3">目的</div>
                       </div>
                       <template v-for="item in target.transportation.option" :key="item">
                         <div class="row">
-                          <div class="col">{{ item.mode }}</div>
-                          <div class="col">{{ item.trainName }}</div>
-                          <div class="col">{{ item.to }}</div>
-                          <div class="col-2">{{ item.time }}min</div>
-                          <div class="col-2">¥{{ item.pay }}</div>
+                          <div class="col col-4 col-lg-2">{{ item.mode }}</div>
+                          <div class="col col-4 col-lg-2">{{ item.time }}min</div>
+                          <div class="col col-4 col-lg-2">¥{{ item.pay }}</div>
+                          <div class="col col-12 col-lg-3" :style="!item.trainName?'border:none':''">
+                            {{ item.trainName }}
+                          </div>
+                          <div class="col col-12 col-lg-3">{{ item.to }}</div>
                         </div>
                       </template>
                     </div>
@@ -365,6 +367,7 @@ const showTran = (day, index) => {
     }
 
     .col {
+      text-align: center;
       border-radius: 0;
       border: solid 0.1rem;
     }
