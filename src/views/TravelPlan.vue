@@ -1,19 +1,20 @@
 <script setup>
-import { computed } from '@vue/reactivity';
-import { reactive } from 'vue';
-const totalPay = (target) => {
+import { reactive, computed } from 'vue';
+const totalPay = (/** @type {{ transportation: { option: any[]; }; }} */ target) => {
   const payList = target.transportation.option.map((i) => i.pay);
   return payList.reduce((acc, cur) => acc + cur);
 };
-const totalWalkingTime = (target) => {
-  const walkList = target.transportation.option.map((i) => {
-    return i.mode == 'walking' ? i.time : 0;
-  });
-  return walkList.reduce((acc, cur) => acc + cur) + '分鐘';
+const totalWalkingTime = (/** @type {{ transportation: { option: any[]; }; }} */ target) => {
+  const walkList = target.transportation.option.map(
+    (/** @type {{ mode: string; time: any; }} */ i) => {
+      return i.mode == 'walking' ? i.time : 0;
+    }
+  );
+  return walkList.reduce((/** @type {any} */ acc, /** @type {any} */ cur) => acc + cur) + '分鐘';
 };
-const totalTime = (target) => {
-  const walkList = target.transportation.option.map((i) => i.time);
-  return walkList.reduce((acc, cur) => acc + cur) + '分鐘';
+const totalTime = (/** @type {{ transportation: { option: any[]; }; }} */ target) => {
+  const walkList = target.transportation.option.map((/** @type {{ time: any; }} */ i) => i.time);
+  return walkList.reduce((/** @type {any} */ acc, /** @type {any} */ cur) => acc + cur) + '分鐘';
 };
 const plan = reactive([
   [
@@ -89,7 +90,7 @@ const plan = reactive([
     {
       name: '澀谷LOFT',
       arrivedTime: '16:00',
-      leaveTime: '18:00',
+      leaveTime: '17:25',
       transportation: {
         googleUrl: 'https://goo.gl/maps/NP8NMFUKyZxqryT18',
         option: [
@@ -105,7 +106,7 @@ const plan = reactive([
     },
     {
       name: '澀谷Sky',
-      arrivedTime: '18:10',
+      arrivedTime: '17:40',
       leaveTime: '20:00',
       transportation: {
         googleUrl: 'https://goo.gl/maps/Z4Az5rEvpHsuRfiw6',
@@ -258,64 +259,310 @@ const plan = reactive([
       arrivedTime: '00:00',
       leaveTime: '08:00',
       transportation: {
-        googleUrl: 'https://goo.gl/maps/g2zD1cDZUvoMPkGd6',
+        googleUrl: 'https://goo.gl/maps/bpkxTEpaQrDXBwSAA',
         option: [
           {
             mode: 'walking',
             trainName: null,
-            to: '東新宿',
+            to: 'blue bottle',
+            pay: 0,
+            time: 14
+          }
+        ]
+      }
+    },
+    {
+      name: 'blue bottle 新宿店',
+      arrivedTime: '08:20',
+      leaveTime: '09:00',
+      transportation: {
+        googleUrl: 'https://goo.gl/maps/x2QaM6KPrQr2nuJn7',
+        option: [
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '新宿',
             pay: 0,
             time: 6
           },
           {
             mode: '地鐵',
-            trainName: '都營大江戶(往飯田橋、兩國)',
-            to: '上野御徒町',
-            pay: 0,
-            time: 15
-          },
-          {
-            mode: '地鐵',
-            trainName: '東京地鐵銀座線(往淺草)',
-            to: '淺草',
-            pay: 317,
-            time: 7
+            trainName: '中央‧總武線各站停車',
+            to: '淺草橋',
+            pay: 360,
+            time: 6
           },
           {
             mode: 'walking',
             trainName: null,
-            to: '風神雷門',
+            to: '淺草橋',
+            pay: 0,
+            time: 3
+          },
+          {
+            mode: '地鐵',
+            trainName: '淺草線',
+            to: '淺草',
             pay: 0,
             time: 2
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '淺草寺 雷門',
+            pay: 0,
+            time: 5
           }
         ]
-      },
-    },{
-      name: '風神雷門',
-      arrivedTime: '08:40',
-      leaveTime: '08:00',
+      }
+    },
+    {
+      name: '風神雷門 (去淺草站放行李)',
+      arrivedTime: '09:45',
+      leaveTime: '10:40',
       transportation: {
         googleUrl: '',
         option: [
           {
             mode: 'walking',
             trainName: null,
-            to: '東新宿',
+            to: '淺草',
             pay: 0,
             time: 6
           },
+          {
+            mode: 'walking',
+            trainName: '淺草線',
+            to: '押上',
+            pay: 0,
+            time: 3
+          }
         ]
-      },
+      }
+    },
+    {
+      name: '晴空塔',
+      arrivedTime: '10:55',
+      leaveTime: '11:50',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: '淺草線',
+            to: '東銀座',
+            pay: 320,
+            time: 6
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '東銀座',
+            pay: 0,
+            time: 1
+          },
+          {
+            mode: '地鐵',
+            trainName: '各站停車中目黑',
+            to: '日比谷',
+            pay: 0,
+            time: 2
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: 'Shake Shack - 東京國際論壇店',
+            pay: 0,
+            time: 5
+          }
+        ]
+      }
+    },
+    {
+      name: 'shack shark',
+      arrivedTime: '12:10',
+      leaveTime: '13:40',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '有樂町',
+            pay: 0,
+            time: 4
+          },
+          {
+            mode: '地鐵',
+            trainName: '山手線',
+            to: '東京車站',
+            pay: 180,
+            time: 3
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '東京車站',
+            pay: 0,
+            time: 4
+          },
+          {
+            mode: '新幹線',
+            trainName: '希望號',
+            to: '新大阪',
+            pay: 180,
+            time: 150
+          },
+          {
+            mode: '地鐵',
+            trainName: '御堂筋線',
+            to: '心齋橋站',
+            pay: 180,
+            time: 3
+          },
+          {
+            mode: 'walking',
+            trainName: null,
+            to: '大阪心齋橋相鐵FRESA INN',
+            pay: 0,
+            time: 6
+          }
+        ]
+      }
+    },
+    {
+      name: '大阪心齋橋相鐵FRESA INN',
+      arrivedTime: '17:15',
+      leaveTime: '00:00',
+      transportation: null
     }
+  ],
+  [
+    {
+      name: '大阪心齋橋相鐵FRESA INN',
+      arrivedTime: '00:00',
+      leaveTime: '07:10',
+      transportation: {
+        googleUrl: 'https://goo.gl/maps/fsRJAD4xLHVDcP3fA',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '大阪環球影城',
+            pay: 410,
+            time: 32
+          }
+        ]
+      }
+    },
+    {
+      name: '大阪環球影城',
+      arrivedTime: '08:00',
+      leaveTime: '20:00',
+      transportation: {
+        googleUrl: 'https://goo.gl/maps/rycmHA5U36zkz8Yi6',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '大阪心齋橋相鐵FRESA INN',
+            pay: 430,
+            time: 33
+          }
+        ]
+      }
+    },
+    {
+      name: '大阪心齋橋相鐵FRESA INN',
+      arrivedTime: '20:40',
+      leaveTime: '',
+      transportation: null
+    },
+    {
+      name: '大阪晃晃',
+      arrivedTime: '20:40',
+      leaveTime: '',
+      transportation: null
+    }
+  ],
+  [
+    {
+      name: '大阪心齋橋相鐵FRESA INN',
+      arrivedTime: '00:00',
+      leaveTime: '08:00',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '新世界本通商店街',
+            pay: 190,
+            time: 15
+          }
+        ]
+      }
+    },
+    {
+      name: '新世界本通商店街&通天閣',
+      arrivedTime: '08:15',
+      leaveTime: '10:20',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '大阪城',
+            pay: 240,
+            time: 35
+          }
+        ]
+      }
+    },
+    {
+      name: '大阪城',
+      arrivedTime: '10:55',
+      leaveTime: '13:30',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '大阪城',
+            pay: 240,
+            time: 31
+          }
+        ]
+      }
+    },
+    {
+      name: '梅田阪急百貨',
+      arrivedTime: '10:55',
+      leaveTime: '13:30',
+      transportation: {
+        googleUrl: '',
+        option: [
+          {
+            mode: '地鐵',
+            trainName: null,
+            to: '大阪城',
+            pay: 240,
+            time: 35
+          }
+        ]
+      }
+    },
   ]
 ]);
 const show = reactive({});
-const showTran = (day, index) => {
+const showTran = (/** @type {string | number} */ day, /** @type {string | number} */ index) => {
   show[day] = show[day] ?? {};
   show[day][index] = !show[day][index];
 };
 
-const totalTransPay = (mode) => {
+const totalTransPay = (/** @type {string} */ mode) => {
   const a = [];
   plan.forEach((i) =>
     i.forEach((j) =>
